@@ -11,13 +11,15 @@ use Livewire\Attributes\On;
 
 class Users extends Component
 {
-    public $user, $roles, $name, $email, $identificacion, $telefono, $rol, $rolS, $id_user;
+    public $user, $roles, $name, $email, $identificacion, $telefono, $rol, $rolS, $id_user, $isEdit = false;
 
     public function abrirModal($id, $modal){
 
-        $this->user = User::find($id);
 
         if($modal == 'Edit'){
+            $this->isEdit = true;
+            $this->user = User::find($id);
+
             $this->roles = Role::get()->pluck('name');
             $this->name = $this->user->name;
             $this->email = $this->user->email;
@@ -25,8 +27,18 @@ class Users extends Component
             $this->telefono = $this->user->telefono;
             $this->id_user = $id;
             $this->roles->prepend($this->user->roles->implode('name', ','));
+
+            $this->dispatch('openModal', modal: $modal);
+        }else if ($modal == 'Create'){
+            $this->isEdit = false;
+            $this->roles = Role::get()->pluck('name');
+            $this->dispatch('openModal', modal: 'Edit');
+        }else{
+            $this->user = User::find($id);
+            $this->dispatch('openModal', modal: $modal);
         }
-        $this->dispatch('openModal', modal: $modal);
+
+
     }
 
     public function closeModal($modal){
@@ -50,28 +62,39 @@ class Users extends Component
             'email' => 'required',
         ]);
 
-        if($this->rol != NULL){
+        if($this->isEdit == true){
+            if($this->rol != NULL){
 
-            User::find($this->id_user)->update([
-                'name' => $this->name ,
-                'email' => $this->email,
-                'identificacion' => $this->identificacion,
-                'telefono' => $this->telefono
-            ]);
+                User::find($this->id_user)->update([
+                    'name' => $this->name ,
+                    'email' => $this->email,
+                    'identificacion' => $this->identificacion,
+                    'telefono' => $this->telefono
+                ]);
 
-             User::find($this->id_user)->syncRoles($this->rol);
+                 User::find($this->id_user)->syncRoles($this->rol);
 
+            }else{
+
+                User::find($this->id_user)->update([
+                    'name' => $this->name ,
+                    'email' => $this->email,
+                ]);
+            }
+
+            $this->closeModal('Edit');
+            $this->dispatch('UserUpdate');
         }else{
-
-            User::find($this->id_user)->update([
+            $user = User::create([
                 'name' => $this->name ,
                 'email' => $this->email,
+                'password' => Hash::make($this->email),
             ]);
+            $user->assignRole($this->rol);
+
+            $this->closeModal('Edit');
+            $this->dispatch('UserCreate');
         }
-
-        $this->closeModal('Edit');
-        $this->dispatch('UserUpdate');
-
     }
 
     public function delUser($id){

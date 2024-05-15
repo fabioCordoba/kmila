@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::group(['middleware' => ['role:USER|ADMINISTRADOR']], function () {
+Route::group(['middleware' => ['role:ROOT|USER|ADMINISTRADOR']], function () {
     Route::middleware(['auth:sanctum', 'verified'])->get('/users', function () {
         return view('users');
     })->name('users');

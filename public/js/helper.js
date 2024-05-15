@@ -21,6 +21,13 @@ document.addEventListener('livewire:init', () => {
     });
 
     /**
+     * Evento para Notificar que el usuario se Actualizo con exito
+     */
+    Livewire.on('UserCreate', event => {
+        MsgDetallado('alert-success', 'Usuario Creado con exito...');
+    });
+
+    /**
      * Evento para Notificar que el Registro se  Actualizo con exito
      */
     Livewire.on('update', event => {

@@ -17,12 +17,20 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $admin = User::create([
+            'name' => 'Camila correa',
+            'email' => 'camilacorrea@gmail.com',
+            'password' => Hash::make('admin'),
+        ]);
+
+        $admin->assignRole('ADMINISTRADOR');
+
+        $admin = User::create([
             'name' => 'Fabio Cordoba',
             'email' => 'fabiocordoba1@gmail.com',
             'password' => Hash::make('admin'),
         ]);
 
-        $admin->assignRole('ADMINISTRADOR');
+        $admin->assignRole('ROOT');
 
         $asesor = User::create([
             'name' => 'Cliente',

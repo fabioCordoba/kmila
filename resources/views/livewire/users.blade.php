@@ -30,90 +30,67 @@
 
     <!-- Modal Edit-->
     <div wire:ignore.self  class="modal fade" id="modal-Edit" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-md" style="margin-top: 20px;"> >
+    <div class="modal-dialog modal-md" style="margin-top: 20px;">
         <div class="modal-content">
             <div class="modal-header" style="padding: 10px;">
                 <h5 class="modal-title">Editar Usuario</h5>
                 <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition" wire:click="closeModal('Edit')" aria-label="Close">Close</button>
             </div>
             <div class="modal-body" style="padding: 10px;">
-                @if ($user)
-                    <form  >
-                    {{csrf_field()}}
+                <form  >
+                {{csrf_field()}}
 
-                    <div class="row">
-                        <div class="cc col-md-12">
-                            <div class="input-group input-group-sm mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text font-italic" id="inputGroup-sizing-sm" style="color: black;">Cedula</span>
-                                </div>
-                        <!----> <input type="text" class="form-control" id="cedula" name="cedula" wire:model="identificacion" value="identificacion" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <div class="input-group-prepend input-group-append">
-                                    <span class="input-group-text font-italic" id="inputGroup-sizing-sm" style="color: black;">Telefono</span>
-                                </div>
-                        <!----> <input type="text" class="form-control" aria-label="Sizing example input" id="telefono" name="telefono" wire:model="telefono" placeholder="Telefono" aria-describedby="inputGroup-sizing-sm">
-                            </div>
-                        </div>
+                {{$isEdit}}
+
+                <div class="row">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="basic-addon1">Cedula</span>
+                        <input type="text" class="form-control" id="cedula" name="cedula" wire:model="identificacion" value="identificacion" placeholder="Cedula" aria-label="Cedula">
+                        <span class="input-group-text">Telefono</span>
+                        <input type="text" class="form-control" id="telefono" name="telefono" wire:model="telefono" placeholder="Telefono" aria-label="Telefono">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="basic-addon1">Nombre</span>
+                        <input type="text" class="form-control" id="name" name="name" wire:model="name" placeholder="Nombre" aria-label="Nombre">
+                        <input type="text" wire:model="id_user" hidden>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="basic-addon1">Correo</span>
+                        <input type="text" class="form-control" id="email" name="email" wire:model="email" placeholder="Correo" aria-label="Correo">
+                    </div>
+                </div>
+
+                @role('ROOT')
+                <div class="row">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="basic-addon1">Rol</span>
+                        <select class="form-select form-select-sm" aria-label="Small select example" id="rol" name="rol" wire:model="rol">
+                            @if ($roles)
+                                @foreach ($roles as $esp)
+                                    <option value="{{$esp}}">{{$esp}}</option>
+                                @endforeach
+                            @else
+
+                            @endif
+                        </select>
+                    </div>
+                </div>
+                @endrole
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-sm btn-outline-info" wire:click="Store">Crear</button>
                     </div>
 
-                    <div class="row">
-                        <div class="cc col-md-12">
-                        <div class="input-group input-group-sm mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text font-italic" id="inputGroup-sizing-sm" style="color: black;">Nombre</span>
-                            </div>
-                            <input type="text" wire:model="id_user" hidden>
-                            <input type="text" class="form-control" aria-label="Sizing example input" id="name" name="name" wire:model="name" placeholder="Nombre" aria-describedby="inputGroup-sizing-sm">
-                        </div>
-                        </div>
+                </div>
 
-                    </div>
-
-                    <div class="row">
-
-                        <div class="cc col-md-12">
-                            <div class="input-group input-group-sm mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text font-italic" id="inputGroup-sizing-sm" style="color: black;">Correo</span>
-                                </div>
-                                <input type="text" class="form-control" aria-label="Sizing example input" id="email" name="email" wire:model="email" placeholder="Correo" aria-describedby="inputGroup-sizing-sm">
-                            </div>
-                        </div>
-
-                        @role('ROOT')
-                        <div class="cc col-md-12">
-
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Rol</label>
-                                <select class="form-control" id="rol" name="rol" wire:model="rol">
-                                    @if ($roles)
-                                        @foreach ($roles as $esp)
-                                            <option value="{{$esp}}">{{$esp}}</option>
-                                        @endforeach
-
-                                    @else
-
-                                    @endif
-                                </select>
-                              </div>
-                        </div>
-                        @endrole
-
-
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4">
-                            <button type="button" class="btn btn-sm btn-outline-info" wire:click="Store">Crear</button>
-                        </div>
-
-                    </div>
-
-                    </form>
-
-                @else
-
-                @endif
+                </form>
 
             </div>
 
@@ -140,7 +117,9 @@
                 Rol
             </th>
             <th scope="col" class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Opciones
+                <button class="rounded-full bg-red-500">
+                    <span class="bg-purple-200 text-purple-600 py-1 px-3 rounded-full text-xs" wire:click="abrirModal(0,'Create')">Crear Usuario</span>
+                </button>
             </th>
         </tr>
       </thead>
