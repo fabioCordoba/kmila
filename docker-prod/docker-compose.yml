@@ -1,0 +1,67 @@
+version: "3.7"
+
+services:
+#   nginx:
+#     image: nginx:stable-alpine
+#     container_name: nginx
+#     ports:
+#       - 8015:80
+#     volumes:
+#       - .:/var/www/html
+#       - ./default.conf:/etc/nginx/conf.d/default.conf
+#     depends_on:
+#       - app
+#       - postgres-db
+#     networks:
+#       - app-network
+
+  # mysql-db:
+  #   image: mysql:5.7.33
+  #   container_name: mysql-db
+  #   restart: always
+  #   environment:
+  #      MYSQL_DATABASE: tenant_config_db
+  #      MYSQL_USER: db_user
+  #      MYSQL_PASSWORD: db_password
+  #      MYSQL_ROOT_PASSWORD: db_root_password
+  #   ports:
+  #     - 33069:3306
+  #   depends_on:
+  #     - app
+  #   networks:
+  #     - app-network
+  #   volumes:
+  #     - dbdata:/var/lib/mysql
+
+  postgres-db:
+    image: postgres:14.3
+    container_name: postgres-db
+    restart: always
+    environment:
+        POSTGRES_DB: kmila-db-test
+        POSTGRES_USER: db_user
+        POSTGRES_PASSWORD: db_password
+    ports:
+      - 5433:5432
+    depends_on:
+      - app
+    networks:
+      - app-network
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+  app:
+    image: fabiocordobaimx/personal:kmila-app-v1
+    container_name: app
+    env_file:
+     - .env
+    ports:
+     - 8002:8000
+    networks:
+     - app-network
+
+networks:
+  app-network:
+
+volumes:
+  dbdata:
