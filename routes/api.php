@@ -28,15 +28,13 @@ Route::group(['middleware'=>['auth:api']], function () {
     //Route::post('/forgot', 'ForgotPasswordController@forgot');
     //Route::post('/reset', 'ForgotPasswordController@reset');
 });
+Route::resource('capital', App\Http\Controllers\CapitalController::class);
+Route::get('/capital/search/{select}/{param}', [App\Http\Controllers\CapitalController::class, 'search']);
+Route::get('/capital/all/summary', [App\Http\Controllers\CapitalController::class, 'summary']);
 
 Route::get('/test', function () {
-
-    // return response([
-    //     User::whereHas('roles',function ($q){
-    //         $q->where('name', 'ADMINISTRADOR');
-    //     })->get(),
-    // ], 200);
     return response(
         User::all()
     );
 });
+
