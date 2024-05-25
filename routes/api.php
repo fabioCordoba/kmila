@@ -28,9 +28,20 @@ Route::group(['middleware'=>['auth:api']], function () {
     //Route::post('/forgot', 'ForgotPasswordController@forgot');
     //Route::post('/reset', 'ForgotPasswordController@reset');
 });
+
+/*
+| Api Route Capital
+*/
 Route::resource('capital', App\Http\Controllers\CapitalController::class);
 Route::get('/capital/search/{select}/{param}', [App\Http\Controllers\CapitalController::class, 'search']);
 Route::get('/capital/all/summary', [App\Http\Controllers\CapitalController::class, 'summary']);
+
+
+Route::resource('finance', App\Http\Controllers\FinanceController::class);
+Route::get('/finance/search/{select}/{param}', [App\Http\Controllers\FinanceController::class, 'search']);
+Route::get('/finance/by/user/{user_id}', [App\Http\Controllers\FinanceController::class, 'financeByUser']);
+Route::get('/user/by/finance/{finance_id}', [App\Http\Controllers\FinanceController::class, 'UserByFinance']);
+
 
 Route::get('/test', function () {
     return response(

@@ -13,7 +13,7 @@ class Capital extends Model
         'amount',
         'description',
         'with_partner',
-        'type', // in, out, loan, investment
+        'type', // in, out, loan, investment, pay
         'status', // Active, Delete
     ];
 }

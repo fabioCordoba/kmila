@@ -90,4 +90,6 @@ class AuthController extends Controller
         return response(['message' => 'Logged Successful !!'], 200);
 
     }
+
+
 }
