@@ -130,19 +130,29 @@ class CapitalController extends Controller
     {
         $capital = Capital::where('status', 'Active')->get();
 
-        $totalIn = $capital->where('type', 'in')->sum('amount'); //inversion Total
-        $totalOut = $capital->where('type', 'out')->sum('amount'); //salida de capital
+        $total_in = $capital->where('type', 'in')->sum('amount'); //inversion Total
+        $total_out = $capital->where('type', 'out')->sum('amount'); //salida de capital
         $loan = $capital->where('type', 'loan')->sum('amount'); // Capital Prestado
-        $pay = $capital->where('type', 'pay')->sum('amount'); // pagos, intereses o capital
+        $capital_pay = $capital->where('type', 'capital_pay')->sum('amount'); // pagos capital
+        $interest_pay = $capital->where('type', 'interest_pay')->sum('amount'); // pagos intereses
+        $total_pay = $capital_pay + $interest_pay;
+        $capital_total = $total_in + $total_pay;
+        $requested = $capital->where('type', 'requested')->sum('amount');// solicitudes de prestamo
+
+        //**crear otro estado para separar los pagos a intereses y los pagos a Capital */
 
         $data = [
             'status' => 200,
             'message' => 'Resumen Capital.',
-            'capital_total' => $totalIn, //inversion Total
-            'capital_salida_total' => $totalOut,
-            'total_prestado' => $loan,
-            'total_disponible' => ($totalIn - $totalOut - $loan) + $pay,
-            'pagos_totales' => $pay
+            'capital_in' => $total_in, //inversion Total
+            'capital_pay' => $capital_pay, //pagos capital
+            'interest_pay' => $interest_pay, //pagos intereses
+            'capital_total' => $capital_total, //inversion Total + pagos
+            'pagos_totales' => $total_pay,
+            'capital_salida_total' => $total_out,
+            'total_prestado' => $loan - $capital_pay,
+            'total_disponible' => ($capital_total - $total_out - $loan),
+            'Solicitud_prestamo' => $requested
         ];
         return response()->json($data,200);
     }

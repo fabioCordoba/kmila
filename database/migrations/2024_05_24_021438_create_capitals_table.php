@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('capitals', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('finance_id')->nullable();
+            $table->foreign('finance_id')->references('id')->on('finances')->onDelete('cascade');
             $table->float('amount', 10, 2);
             $table->string('description');
             $table->boolean('with_partner');

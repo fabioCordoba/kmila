@@ -65,4 +65,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Finance', 'user_id');
     }
+
+    public function obligations()
+    {
+        return $this->hasMany('App\Models\Obligation', 'user_id');
+    }
+
+    public function payments()
+    {
+        return $this->hasMany('App\Models\Payments', 'user_id');
+    }
 }

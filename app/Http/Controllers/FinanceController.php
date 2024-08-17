@@ -28,7 +28,8 @@ class FinanceController extends Controller
             'user_id' => 'required',
             'amount' => 'required',
             'interest_rate' => 'required',
-            'start_date' => 'required'
+            'start_date' => 'required',
+            'status' => 'required'
         ]);
 
         if($validator->fails()){
@@ -51,14 +52,21 @@ class FinanceController extends Controller
                 'term_months' => $request->term_months,
                 'interest_rate' => $request->interest_rate,
                 'start_date' => $request->start_date,
-                'status' => 'Active'
+                'status' => $request->status
             ]);
 
+            if($finance->status == 'Aprobado'){
+                $type = 'loan';
+            }else{
+                $type = 'requested';
+            }
+
             Capital::create([
+                'finance_id' => $finance->id,
                 'amount' => $finance->amount,
                 'with_partner' => false,
                 'description' => 'Finance: '.$finance->note,
-                'type' => 'loan',
+                'type' => $type,
                 'status' => 'Active'
             ]);
 
@@ -106,7 +114,8 @@ class FinanceController extends Controller
             'user_id' => 'required',
             'amount' => 'required',
             'interest_rate' => 'required',
-            'start_date' => 'required'
+            'start_date' => 'required',
+            'status' => 'required'
         ])->validate();
 
         $finance = Finance::find($id);
@@ -117,13 +126,27 @@ class FinanceController extends Controller
             'term_months' => $request->term_months,
             'interest_rate' => $request->interest_rate,
             'start_date' => $request->start_date,
-            'status' => 'Active'
+            'status' => $request->status
+        ]);
+
+        $capital = Capital::find($finance->capital->first()->id);
+        if($finance->status == 'Aprobado'){
+            $type = 'loan';
+        }else{
+            $type = 'requested';
+        }
+
+        $capital->update([
+            'amount' => $finance->amount,
+            'with_partner' => false,
+            'description' => 'Finance: '.$finance->note,
+            'type' => $type,
         ]);
 
         $data = [
             'status' => 201,
             'message' => 'Registro Actualizado.',
-            'Finance' => $finance
+            'Finance' => $finance,
         ];
 
         return response()->json($data,201);
@@ -174,26 +197,24 @@ class FinanceController extends Controller
         return $data;
     }
 
-    public function financeByUser($user_id){
+
+    public function FinanceByRelations($id){
+
+        $finance = Finance::find($id);
 
         $data = [
             'status' => 201,
-            'message' => 'Finances by User.',
-            'finance' => User::find($id)->finances,
+            'message' => 'Finances by Relations.',
+            'user' => $finance->user,
+            'obligations' => $finance->obligations,
+            'capital' => $finance->capital
         ];
 
         return response()->json($data,201);
     }
 
-    public function UserByFinance($finance_id){
-
-        $data = [
-            'status' => 201,
-            'message' => 'User by Finances.',
-            'User' => Finance::find($finance_id)->user,
-        ];
-
-        return response()->json($data,201);
+    public function createObligation($data){
+        return true;
     }
 
 }

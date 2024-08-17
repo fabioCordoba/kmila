@@ -16,7 +16,7 @@ class CapitalTableSeeder extends Seeder
     {
 
         Capital::create([
-            'amount' => 500000,
+            'amount' => 50000,
             'with_partner' => false,
             'description' => 'Ingreso capital 1',
             'type' => 'in',
@@ -24,7 +24,7 @@ class CapitalTableSeeder extends Seeder
         ]);
 
         Capital::create([
-            'amount' => 200000,
+            'amount' => 20000,
             'with_partner' => false,
             'description' => 'Ingreso capital 2',
             'type' => 'in',
@@ -32,7 +32,7 @@ class CapitalTableSeeder extends Seeder
         ]);
 
         Capital::create([
-            'amount' => 500000,
+            'amount' => 50000,
             'with_partner' => false,
             'description' => 'Ingreso capital 3',
             'type' => 'in',

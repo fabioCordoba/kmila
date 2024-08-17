@@ -91,5 +91,17 @@ class AuthController extends Controller
 
     }
 
+    public function userByRelations($id){
+
+        $user = User::find($id);
+        $data = [
+            'status' => 201,
+            'message' => 'User by Relations.',
+            'finances' => $user->finances,
+            'obligations' => $user->obligations
+        ];
+
+        return response()->json($data,201);
+    }
 
 }
