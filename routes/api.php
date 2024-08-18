@@ -24,6 +24,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['middleware'=>['auth:api']], function () {
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
+    Route::get('/check-token', [App\Http\Controllers\AuthController::class, 'checkToken']);
 
     //* Api Route User
     Route::get('/user/by/relations/{id}', [App\Http\Controllers\AuthController::class, 'userByRelations']);

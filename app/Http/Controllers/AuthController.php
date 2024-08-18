@@ -29,15 +29,12 @@ class AuthController extends Controller
 
         $token = $user->createToken($user->name);
 
-        return response([
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'created_at' => $user->created_at,
-            'updated_at' => $user->updated_at,
-            'token' => $token->accessToken,
-            'token_expires_at' => $token->token->expires_at,
-        ], 200);
+        $data = [
+            'user' => $user,
+            'token' => $token->accessToken
+        ];
+
+        return response($data, 200);
 
     }
 
@@ -48,7 +45,7 @@ class AuthController extends Controller
             'password' => 'required|string',
         ])->validate();
 
-        $user  = User::where('email',$fields['email'])->first();
+        $user = User::where('email',$fields['email'])->first();
 
         if(!$user || !Hash::check($fields['password'], $user->password)){
             return response([
@@ -58,17 +55,13 @@ class AuthController extends Controller
 
         $token = $user->createToken($user->name);
 
-        return response([
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'created_at' => $user->created_at,
-            'updated_at' => $user->updated_at,
-            'token' => $token->accessToken,
-            'token_expires_at' => $token->token->expires_at,
-            //'token' => $token->accessToken,
-            //'token_expires_at' => $token->token->expires_at,
-        ], 200);
+        $data = [
+            'user' => $user,
+            'token' => $token->accessToken
+        ];
+
+        return response($data, 200);
+
     }
 
     public function logout(Request $request)
@@ -89,6 +82,18 @@ class AuthController extends Controller
         $userToken->delete();
         return response(['message' => 'Logged Successful !!'], 200);
 
+    }
+
+    public function checkToken(){
+        $user = Auth::user();
+        $token = $user->createToken($user->name);
+
+        $data = [
+            'user' => $user,
+            'token' => $token->accessToken
+        ];
+
+        return response($data, 200);
     }
 
     public function userByRelations($id){
