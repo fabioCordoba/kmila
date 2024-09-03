@@ -51,27 +51,19 @@ Route::group(['middleware'=>['auth:api']], function () {
     Route::get('/payments/search/{select}/{param}', [App\Http\Controllers\PaymentsController::class, 'search']);
     Route::get('/payments/by/relations/{id}', [App\Http\Controllers\PaymentsController::class, 'paymentsByRelations']);
 
-    Route::get('/test', function () {
-        return response(
-            User::all()
-        );
-    });
 
+    //* Api Route Users
+    Route::resource('users', App\Http\Controllers\UserController::class);
+    Route::get('/users/search/{select}/{param}', [App\Http\Controllers\UserController::class, 'search']);
+
+    Route::get('/rol/users', function () {
+        return User::whereHas('roles',function ($q){
+            $q->where('name', 'USER');
+        })->with('roles')->get();
+    });
     //Route::post('/forgot', 'ForgotPasswordController@forgot');
     //Route::post('/reset', 'ForgotPasswordController@reset');
 });
 
 
-Route::get('/patient/{id}', function ($id) {
-
-    $data = [
-        "pat_type_id" => "CC",
-        "pat_id" => "000111",
-        "pat_name" =>"Test KV",
-        "pat_birthdate" => "00000",
-        "pat_sex" => "F"
-    ];
-
-    return response()->json($data,201);
-});
 

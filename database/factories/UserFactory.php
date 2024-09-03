@@ -21,8 +21,12 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
+            'uid' => $this->faker->unique()->numberBetween(1000000000, 9999999999),
+            'phone' => null,
+            'address' => null,
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
+            'status' => 'Pending',
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'two_factor_secret' => null,

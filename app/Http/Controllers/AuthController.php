@@ -100,10 +100,9 @@ class AuthController extends Controller
 
         $user = User::find($id);
         $data = [
-            'status' => 201,
-            'message' => 'User by Relations.',
             'finances' => $user->finances,
-            'obligations' => $user->obligations
+            'obligations' => $user->obligations,
+            'payments' => $user->payments
         ];
 
         return response()->json($data,201);
