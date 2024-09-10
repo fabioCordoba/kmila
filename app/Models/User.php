@@ -20,6 +20,7 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
     use HasRoles;
 
+    protected $guard_name = 'api';
     /**
      * The attributes that are mass assignable.
      *
@@ -36,6 +37,7 @@ class User extends Authenticatable
 
 
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -81,4 +83,6 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Payments', 'user_id');
     }
+
+
 }

@@ -18,6 +18,7 @@ use App\Models\User;
 Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
 Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
 
+//* User mediante JWT
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -26,7 +27,9 @@ Route::group(['middleware'=>['auth:api']], function () {
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
     Route::get('/check-token', [App\Http\Controllers\AuthController::class, 'checkToken']);
 
-    //* Api Route User
+    //* Api Route Users
+    Route::resource('users', App\Http\Controllers\UserController::class);
+    Route::get('/users/search/{select}/{param}', [App\Http\Controllers\UserController::class, 'search']);
     Route::get('/user/by/relations/{id}', [App\Http\Controllers\AuthController::class, 'userByRelations']);
 
 
@@ -52,9 +55,6 @@ Route::group(['middleware'=>['auth:api']], function () {
     Route::get('/payments/by/relations/{id}', [App\Http\Controllers\PaymentsController::class, 'paymentsByRelations']);
 
 
-    //* Api Route Users
-    Route::resource('users', App\Http\Controllers\UserController::class);
-    Route::get('/users/search/{select}/{param}', [App\Http\Controllers\UserController::class, 'search']);
 
     Route::get('/rol/users', function () {
         return User::whereHas('roles',function ($q){
@@ -63,7 +63,9 @@ Route::group(['middleware'=>['auth:api']], function () {
     });
     //Route::post('/forgot', 'ForgotPasswordController@forgot');
     //Route::post('/reset', 'ForgotPasswordController@reset');
+
 });
+
 
 
 

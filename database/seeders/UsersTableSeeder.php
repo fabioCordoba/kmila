@@ -26,7 +26,7 @@ class UsersTableSeeder extends Seeder
             'status' => 'Active'
         ]);
 
-        $admin->assignRole('ADMINISTRADOR');
+        $admin->assignRole('ADMIN');
 
         $admin = User::create([
             'uid' => 1067955068,

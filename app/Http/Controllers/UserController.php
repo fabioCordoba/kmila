@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
@@ -17,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::with('roles')->orderBy('created_at', 'desc')->get();
         return response($users,200);
     }
 
@@ -105,7 +105,9 @@ class UserController extends Controller
             'status'  => $request->status,
         ]);
 
-        $user->assignRole($request->role);
+        $roleString = sprintf("'%s'", $request->role);
+
+        $user->assignRole($roleString);
 
         return response($user, 200);
     }

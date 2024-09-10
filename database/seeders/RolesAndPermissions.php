@@ -33,15 +33,13 @@ class RolesAndPermissions extends Seeder
         Permission::create(['name' => 'delete product']);
         Permission::create(['name' => 'sell product']);
 
-
-
-        $role = Role::create(['name' => 'ADMINISTRADOR']);
+        $role = Role::create(['name' => 'ADMIN', 'guard_name' => 'api']);
         $role->givePermissionTo(Permission::all());
 
-        $role = Role::create(['name' => 'ROOT']);
+        $role = Role::create(['name' => 'ROOT', 'guard_name' => 'api']);
         $role->givePermissionTo(Permission::all());
 
-        $role = Role::create(['name' => 'USER']);
+        $role = Role::create(['name' => 'USER', 'guard_name' => 'api']);
         $role->givePermissionTo('read product');
         $role->givePermissionTo('sell product');
     }

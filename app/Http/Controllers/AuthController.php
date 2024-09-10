@@ -14,15 +14,20 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $fields = Validator::make($request->all(), [
+            'uid' => 'required|unique:users',
             'name' => 'required|string|max:255',
             'email' => 'required|string|unique:users,email',
             'password' => 'required|string|confirmed',
         ])->validate();
 
         $user  = User::create([
+            'uid' => $fields['uid'],
             'name' => $fields['name'],
             'email' => $fields['email'],
             'password' => Hash::make($fields['password']),
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'status'  => 'Pending',
         ]);
 
         $user->assignRole('USER');
